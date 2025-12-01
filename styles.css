@@ -1,0 +1,188 @@
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Body is the full viewport, dark background behind the app */
+body {
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+  background: #050505; /* change later to something more cohesive */
+  color: #f3f3f4;
+}
+
+/* APP SHELL LAYOUT */
+
+.app-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Full-width header bar */
+.app-header {
+  flex: 0 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  /* change background per page */
+  background: linear-gradient(
+    90deg,
+    rgba(77, 242, 255, 0.6),
+    rgba(197, 148, 255, 0.6),
+    rgba(255, 94, 101, 0.6)
+  );
+}
+
+/* Logo icon in header */
+.app-header__logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #f3f3f4;
+}
+
+/* Page title text next to logo */
+.app-header__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Main area stretches between header and footer */
+.app-main {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center; /* center the inner column horizontally */
+  padding: 1.5rem 0.75rem;
+}
+
+/* phone viewport column */
+.app-shell {
+  width: 100%;
+  max-width: 420px;       /* mobile-ish width, can tweak */
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    28.88deg,
+    rgba(77, 242, 255, 0.71) 19.75%,
+    rgba(197, 148, 255, 0.71) 47.09%,
+    rgba(255, 94, 101, 0.71) 80.25%
+  );
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Inner content area inside the gradient shell */
+.app-content {
+  flex: 1 1 auto;
+  padding: 1.25rem 1.25rem 5rem; /* bottom padding makes space above nav */
+}
+
+/* Section titles */
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* BOTTOM NAV */
+
+/* Footer bar */
+.app-footer {
+  flex: 0 0 auto;
+  background: #1c1c1e;
+  padding: 0.5rem 0;
+}
+
+/* footer nav */
+.app-nav {
+  max-width: 420px;     /* align with app-shell width */
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* Individual nav item */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.75rem;
+  color: #b8b8bb;
+  text-decoration: none;
+}
+
+/* round icon placeholder CHANGE LATER */
+.nav-item__icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 3px solid #b8b8bb;
+}
+
+/* Active page link */
+.nav-item--active {
+  color: #f3f3f4;
+}
+
+.nav-item--active .nav-item__icon {
+  border-color: #f3f3f4;
+}
+
+/* CARDS */
+
+/* glassy cards  */
+.card-glass {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 0.75rem;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+/* search input */
+.search-input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #2b2b2d;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+}
+
+/* Filter pill bar */
+.filter-bar {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  background: #2b2b2d;
+  color: #f3f3f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Small label under cards */
+.muted-label {
+  font-size: 0.75rem;
+  color: #d0d0d2;
+}
+
+/* change width on very large screens */
+@media (min-width: 1200px) {
+  .app-shell,
+  .app-nav {
+    max-width: 480px;
+  }
+}
