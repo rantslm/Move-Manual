@@ -9,12 +9,12 @@ const resultsGrid = document.getElementById('results-grid');
 if (!searchInput || !resultsGrid) {
   console.warn('discover.js: required DOM elements not found.');
 } else {
+
   //  API config 
-  // my RapidAPI key from ExerciseDB docs
-  const API_KEY = '0e1da515dcmshe7ee7a4b14f6041p19391fjsn72a0f1a7208d';
-  // Base URL for ExerciseDB via RapidAPI
+  const API_KEY = '0e1da515dcmshe7ee7a4b14f6041p19391fjsn72a0f1a7208d'; 
   const EXERCISE_API_URL = 'https://exercisedb.p.rapidapi.com/exercises';
 
+  // options for fetch() with RapidAPI headers
   const apiOptions = {
     method: 'GET',
     headers: {
@@ -22,8 +22,7 @@ if (!searchInput || !resultsGrid) {
       'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
     },
   };
-  // store fetched exercises
-const allExercises = [];
+
   /**
    * Fetches all exercises from ExerciseDB.
    * @returns {Promise<Array>} Array of exercise objects (or [] on error)
@@ -33,7 +32,6 @@ const allExercises = [];
       const response = await fetch(EXERCISE_API_URL, apiOptions);
 
       if (!response.ok) {
-      
         const text = await response.text();
         console.error('HTTP error', response.status, text);
         throw new Error(`HTTP error ${response.status}`);
@@ -47,6 +45,7 @@ const allExercises = [];
       return [];
     }
   }
+
   /**
    * Renders a list of exercises into the Results section.
    * Uses .card-glass and .muted-label styles from your CSS.
@@ -63,12 +62,23 @@ const allExercises = [];
       return;
     }
 
-    // Create a card for each exercise
+    // Create a card for each exercise 
     list.forEach((ex) => {
       const card = document.createElement('article');
-      card.className = 'card-glass';
+      card.className = 'card-glass exercise-card';
+
+      // LOCAL placeholder image to avoid CORS issues
+      const imageUrl = 'assets/placeholder-exercise.png';
 
       card.innerHTML = `
+        <div class="exercise-card__image-wrapper mb-2">
+          <img
+            src="${imageUrl}"
+            alt="${ex.name}"
+            class="exercise-card__image"
+            loading="lazy"
+          />
+        </div>
         <h3 class="mb-1" style="font-size: 0.95rem;">${ex.name}</h3>
         <p class="muted-label mb-1"><strong>Body part:</strong> ${ex.bodyPart}</p>
         <p class="muted-label mb-1"><strong>Target:</strong> ${ex.target}</p>
@@ -80,10 +90,14 @@ const allExercises = [];
     });
   }
 
+  // initial load
   (async function initDiscover() {
-    const allExercises = await fetchExercises();
-    console.log("data received:", allExercises.slice(0, 3));
-    const firstBatch = allExercises.slice(0, 20);
-    renderExercises(firstBatch);
-})();
+    console.log('Fetching exercise data...');
+    const exercises = await fetchExercises();
+
+    console.log('Sample data:', exercises.slice(0, 3));
+
+    // Render first 20 for now
+    renderExercises(exercises.slice(0, 20));
+  })();
 }
