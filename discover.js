@@ -1,5 +1,12 @@
 // discover.js
 // Connects the Discover page to the ExerciseDB API and renders exercise cards.
+//config
+//fetchExercises()
+// renderExercises()
+// applySearchFilter()
+// search listener
+// getSavedExercises()
+// saveExercise()
 
 //  DOM REFERENCES 
 const searchInput = document.getElementById('search-input');
@@ -11,7 +18,7 @@ if (!searchInput || !resultsGrid) {
 } else {
 
   //  API CONFIG 
-  // Your RapidAPI key (for class project only – normally this shouldn't be in frontend code)
+  // RapidAPI key (wouldnt usually put here but its a class project so oh well)
   const API_KEY = '0e1da515dcmshe7ee7a4b14f6041p19391fjsn72a0f1a7208d';
 
   // Base URL for ExerciseDB via RapidAPI
@@ -142,6 +149,12 @@ function applySearchFilter(query) {
 // For now, still only render the first 20 to keep things lightweight
     renderExercises(filteredExercises.slice(0, 20));
   }
+// search bar even listener
+// When the user types in the search bar, update displayed exercises
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value;
+  applySearchFilter(query);   // Re-runs filtering + re-renders list
+});
 
   //SAVE / LOAD HELPERS (localStorage)
 /**
