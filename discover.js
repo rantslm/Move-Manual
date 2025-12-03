@@ -82,6 +82,8 @@ const allExercises = [];
 
   (async function initDiscover() {
     const allExercises = await fetchExercises();
-    console.log("data received:", allExercises);
-  })();
+    console.log("data received:", allExercises.slice(0, 3));
+    const firstBatch = allExercises.slice(0, 20);
+    renderExercises(firstBatch);
+})();
 }
