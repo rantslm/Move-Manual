@@ -48,7 +48,10 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: #f3f3f4;
+  background-image: url("assets/mm-logo.png");
+  background-size: cover;       
+  background-position: center;  
+  background-repeat: no-repeat;
 }
 
 /* Page title text next to logo */
