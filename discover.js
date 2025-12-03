@@ -19,7 +19,8 @@ if (!searchInput || !resultsGrid) {
 
   // Optional: keep all fetched exercises in memory in case we want to use later
   let allExercises = [];
-
+  //hold the list after search/filter is applied
+  let filteredExercises = [];
   // Options for fetch() with RapidAPI headers
   const apiOptions = {
     method: 'GET',
@@ -117,6 +118,30 @@ if (!searchInput || !resultsGrid) {
       }
     });
   }
+/**
+* Applies a text search to allExercises and updates the UI.
+* Matches on name, bodyPart, and target.
+* @param {string} query
+*/
+function applySearchFilter(query) {
+  const q = query.trim().toLowerCase();
+
+  if (!q) {
+    // If the search is empty, show everything
+    filteredExercises = allExercises;
+  } else {
+    filteredExercises = allExercises.filter((ex) => {
+      return (
+        ex.name.toLowerCase().includes(q) ||
+        ex.bodyPart.toLowerCase().includes(q) ||
+        ex.target.toLowerCase().includes(q)
+      );
+    });
+  }
+
+// For now, still only render the first 20 to keep things lightweight
+    renderExercises(filteredExercises.slice(0, 20));
+  }
 
   //SAVE / LOAD HELPERS (localStorage)
 /**
@@ -149,16 +174,17 @@ if (!searchInput || !resultsGrid) {
   }
 
   //INITIAL LOAD OF DISCOVER PAGE
-  (async function initDiscover() {
-    console.log('Fetching exercise data...');
-    const exercises = await fetchExercises();
+(async function initDiscover() {
+  console.log('Fetching exercise data...');
+  const exercises = await fetchExercises();
 
-    // Keep the full list around if we need it later
-    allExercises = exercises;
+  // Keep the full list around for future filters/search
+  allExercises = exercises;
+  filteredExercises = exercises;
 
-    console.log('Sample data:', exercises.slice(0, 3));
+  console.log('Sample data:', exercises.slice(0, 3));
 
-    // Render first 20 for now to keep it manageable
-    renderExercises(exercises.slice(0, 20));
-  })();
+  // Initial render: no search yet, so pass an empty query
+  applySearchFilter('');
+})();
 }
