@@ -28,6 +28,13 @@ if (!searchInput || !resultsGrid) {
   let allExercises = [];
   //hold the list after search/filter is applied
   let filteredExercises = [];
+
+// Filter dropdown DOM element
+const filterSelect = document.getElementById('filter-select');
+
+// Current filter mode: 'all' | 'upper' | 'lower' | 'core' | 'cardio'
+let currentFilter = 'all';
+
   // Options for fetch() with RapidAPI headers
   const apiOptions = {
     method: 'GET',
@@ -125,36 +132,71 @@ if (!searchInput || !resultsGrid) {
       }
     });
   }
-/**
-* Applies a text search to allExercises and updates the UI.
-* Matches on name, bodyPart, and target.
-* @param {string} query
-*/
-function applySearchFilter(query) {
-  const q = query.trim().toLowerCase();
+  /**
+   * Applies a text search + bodyPart filter to allExercises
+   * and updates the UI.
+   * @param {string} query
+   */
+  function applySearchFilter(query) {
+    const q = query.trim().toLowerCase();
 
-  if (!q) {
-    // If the search is empty, show everything
-    filteredExercises = allExercises;
-  } else {
-    filteredExercises = allExercises.filter((ex) => {
-      return (
-        ex.name.toLowerCase().includes(q) ||
-        ex.bodyPart.toLowerCase().includes(q) ||
-        ex.target.toLowerCase().includes(q)
-      );
-    });
-  }
+    // 1) Text search
+    if (!q) {
+      filteredExercises = allExercises;
+    } else {
+      filteredExercises = allExercises.filter((ex) => {
+        return (
+          ex.name.toLowerCase().includes(q) ||
+          ex.bodyPart.toLowerCase().includes(q) ||
+          ex.target.toLowerCase().includes(q)
+        );
+      });
+    }
 
-// For now, still only render the first 20 to keep things lightweight
+    // 2) Body-part style filter based on currentFilter
+    if (currentFilter !== 'all') {
+      filteredExercises = filteredExercises.filter((ex) => {
+        const body = ex.bodyPart.toLowerCase();
+
+        switch (currentFilter) {
+          case 'upper':
+            return (
+              body.includes('upper') ||
+              body === 'chest' ||
+              body === 'back' ||
+              body === 'shoulders'
+            );
+          case 'lower':
+            return body.includes('lower') || body.includes('leg');
+          case 'core':
+            return body === 'waist';
+          case 'cardio':
+            return body === 'cardio';
+          default:
+            return true;
+        }
+      });
+    }
+
+    // 3) Render first 20 to keep it lightweight
     renderExercises(filteredExercises.slice(0, 20));
   }
-// search bar even listener
+
+// search bar event listener
 // When the user types in the search bar, update displayed exercises
 searchInput.addEventListener('input', () => {
   const query = searchInput.value;
   applySearchFilter(query);   // Re-runs filtering + re-renders list
 });
+
+// filter dropdown event listener
+// When the user picks a body-part filter, update currentFilter + reapply search
+if (filterSelect) {
+  filterSelect.addEventListener('change', () => {
+    currentFilter = filterSelect.value;         // 'all' | 'upper' | 'lower' | 'core' | 'cardio'
+    applySearchFilter(searchInput.value || ''); // keep current text search
+  });
+}
 
   //SAVE / LOAD HELPERS (localStorage)
 /**
