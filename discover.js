@@ -13,6 +13,9 @@ if (!searchInput || !resultsGrid) {
   //  API config 
   const API_KEY = '0e1da515dcmshe7ee7a4b14f6041p19391fjsn72a0f1a7208d'; 
   const EXERCISE_API_URL = 'https://exercisedb.p.rapidapi.com/exercises';
+  // keep all fetched exercises in memory so we can look them up when saving
+  let allExercises = [];
+
 
   // options for fetch() with RapidAPI headers
   const apiOptions = {
@@ -83,6 +86,13 @@ if (!searchInput || !resultsGrid) {
         <p class="muted-label mb-1"><strong>Body part:</strong> ${ex.bodyPart}</p>
         <p class="muted-label mb-1"><strong>Target:</strong> ${ex.target}</p>
         <p class="muted-label mb-0"><strong>Equipment:</strong> ${ex.equipment}</p>
+        <button
+        class="bookmark-btn btn btn-outline-light btn-sm mt-2"
+        data-id="${ex.id}"
+        aria-label="Save exercise"
+      >
+        ★ Save
+      </button>
       `;
 
       // Append the card into the results container
@@ -94,6 +104,8 @@ if (!searchInput || !resultsGrid) {
   (async function initDiscover() {
     console.log('Fetching exercise data...');
     const exercises = await fetchExercises();
+
+    allExercises = exercises; 
 
     console.log('Sample data:', exercises.slice(0, 3));
 
