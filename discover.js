@@ -22,7 +22,8 @@ if (!searchInput || !resultsGrid) {
       'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
     },
   };
-
+  // store fetched exercises
+const allExercises = [];
   /**
    * Fetches all exercises from ExerciseDB.
    * @returns {Promise<Array>} Array of exercise objects (or [] on error)
@@ -46,6 +47,39 @@ if (!searchInput || !resultsGrid) {
       return [];
     }
   }
+  /**
+   * Renders a list of exercises into the Results section.
+   * Uses .card-glass and .muted-label styles from your CSS.
+   * @param {Array<Object>} list - array of exercise objects from ExerciseDB
+   */
+  function renderExercises(list) {
+    // Clear whatever is currently in the grid
+    resultsGrid.innerHTML = '';
+
+    // If nothing to show, display a friendly message
+    if (!list.length) {
+      resultsGrid.innerHTML =
+        '<p class="muted-label text-center">No exercises found.</p>';
+      return;
+    }
+
+    // Create a card for each exercise
+    list.forEach((ex) => {
+      const card = document.createElement('article');
+      card.className = 'card-glass';
+
+      card.innerHTML = `
+        <h3 class="mb-1" style="font-size: 0.95rem;">${ex.name}</h3>
+        <p class="muted-label mb-1"><strong>Body part:</strong> ${ex.bodyPart}</p>
+        <p class="muted-label mb-1"><strong>Target:</strong> ${ex.target}</p>
+        <p class="muted-label mb-0"><strong>Equipment:</strong> ${ex.equipment}</p>
+      `;
+
+      // Append the card into the results container
+      resultsGrid.appendChild(card);
+    });
+  }
+
   (async function initDiscover() {
     const allExercises = await fetchExercises();
     console.log("data received:", allExercises);
