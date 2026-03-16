@@ -1,4 +1,3 @@
-```markdown
 # Move Manual
 
 Move Manual is a front-end fitness application designed to help users discover, save, and organize personalized workout exercises. The app uses the ExerciseDB API to fetch real exercise data and provides a mobile-inspired interface for browsing workouts by body part, target muscle, equipment, and workout type.
